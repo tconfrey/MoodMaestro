@@ -1,17 +1,53 @@
+#home {
+    width: 600px;
+    margin: auto;
+    background: #C0C0C0;
+    padding: 20px 60px;
+    border: solid #ddd;
+    border-width: 0 1px 1px 1px;
+}
+
+.label {
+	font-family: Garamond;
+	font-size: 28px;
+	text-shadow: none;
+}
+
+.whylabel {
+	margin-bottom: -10px;
+}
+
+#slider {
+	display:none;
+}
+
+.ui-slider-track {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+.emo {
+	width: 100%;
+	height: 100%;
+}
+
+.logo {
+	display: block;
+	margin-left: auto; 
+	margin-right: auto;
+	margin-bottom: 25px;
+}
+
+/* reach in to btn to set width and center */
+.ui-input-btn {
+	width: 150px !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+/*
 body {
     background: #eee;
     text-align: center;
     padding: 0 25px;
-}
-
-#main {
-    width: 500px;
-    margin: auto;
-    text-align: left;
-    background: white;
-    padding: 50px 60px;
-    border: solid #ddd;
-    border-width: 0 1px 1px 1px;
 }
 
 #main h1 {
@@ -38,3 +74,4 @@ body {
     color: green;
     line-height: 13px;
 }
+*/

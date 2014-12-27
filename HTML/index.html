@@ -18,24 +18,32 @@
 
   <div data-role="page">
 	<div data-role="header"></div>
-	<div role="main" class="ui-content">
-	  <div class="center"><img src="../assets/MoodMaestro"/></div>
-	  <h1>How's your mood?</h1>
+	<div role="main" class="ui-content" id="home">
+	  <img class="logo" src="../assets/MoodMaestro"/>
+	  <div class="label">How's your mood?</div>
 	  <div class="ui-grid-d">
-		    <div class="ui-block-a"><div class="ui-bar ui-bar-a" ><img src="../assets/worst-green.jpg" height="100px" width="100px" /></div></div>
-		    <div class="ui-block-b"><div class="ui-bar ui-bar-a" ><img src="../assets/bad.jpg" height="100px" width="100px" /></div></div>
-		    <div class="ui-block-c"><div class="ui-bar ui-bar-a" ><img src="../assets/ok.jpg" height="100px" width="100px" /></div></div>
-		    <div class="ui-block-d"><div class="ui-bar ui-bar-a" ><img src="../assets/good.jpg" height="100px" width="100px" /></div></div>
-		    <div class="ui-block-e"><div class="ui-bar ui-bar-a" ><img src="../assets/best.jpg" height="100px" width="100px" /></div></div>
+		<div class="ui-block-a">
+			<img class="emo" src="../assets/worst-green.jpg" />
+		</div>
+		<div class="ui-block-b">
+			<img class="emo" src="../assets/bad.jpg" />
+		</div>
+		<div class="ui-block-c">
+			<img class="emo" src="../assets/ok.jpg" />
+		</div>
+		<div class="ui-block-d">
+			<img class="emo" src="../assets/good.jpg" />
+		</div>
+		<div class="ui-block-e">
+			<img class="emo" src="../assets/best-orange" />
+		</div>
 	  </div>
-	  <form>
-		    <div data-role="rangeslider" data-track-theme="b" data-theme="a">
-		          <input type="range" name="range-3a" id="range-3a" min="0" max="100" value="20"/>
-		    </div>
-		<h1>Why?</h1>
-		     <input type="text" name="text-1" id="text-1" value=""/>
-	  </form>
-	  <button class="ui-btn">Post It</button>
+
+	  <input type="range" name="slider" id="slider" min="0" max="10" value="5" data-highlight="true" step="0.1"/>
+
+	  <div class="label whylabel">Why?</div>
+	  <input type="text" name="text-1" id="text-1" value=""/>
+	  <input type="button" class="ui-btn" id="postit" value="Post It" />
 	</div>
 	<div data-role="footer"></div>
   </div>
