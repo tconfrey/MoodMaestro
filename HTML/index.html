@@ -9,14 +9,14 @@
 
 	<link rel="stylesheet" href="../CSS/reset.css">
 	<link rel="stylesheet" href="../CSS/styles.css">
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
+	<script type="text/javascript" src="../JS/MM-ui.js"></script>
 
 </head>
 
 <body>
 
-  <div data-role="page">
+  <div data-role="page" id="mainpage">
 	<div data-role="header"></div>
 	<div role="main" class="ui-content" id="home">
 	  <img class="logo" src="../assets/MoodMaestro"/>
@@ -43,7 +43,7 @@
 
 	  <div class="label whylabel">Why?</div>
 	  <input type="text" name="text-1" id="text-1" value=""/>
-	  <input type="button" class="ui-btn" id="postit" value="Post It" />
+	  <input type="button" class="ui-btn" id="postit" value="Post It" onclick="postit()" />
 	</div>
 	<div data-role="footer"></div>
   </div>
