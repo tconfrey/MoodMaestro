@@ -21,7 +21,10 @@
 	display:none;
 }
 
-td, #moods {
+#moods {
+	border-style: solid;
+}
+td {
 	border-style: solid;
 }
 

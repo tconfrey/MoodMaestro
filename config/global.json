@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "MoodMaestro": {
+            "applicationId": "CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", 
+            "masterKey": "9x88BCOAZO57kRo5neR0mUaN3IFNdBnrDGJoKoEG"
+        }, 
+        "_default": {
+            "link": "MoodMaestro"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.2"
+    }
+}
