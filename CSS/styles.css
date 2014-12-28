@@ -21,6 +21,10 @@
 	display:none;
 }
 
+td, #moods {
+	border-style: solid;
+}
+
 .ui-slider-track {
 	margin-left: 0px;
 	margin-right: 0px;

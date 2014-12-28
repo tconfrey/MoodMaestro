@@ -1,8 +1,37 @@
+// global classes
+var Post;
 
 // Set up app
 jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
 	Parse.initialize("CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", "dhILThcP5vWwn0e5tlyIJYpan0EM0ZDzEK3ClV5a");
 
+	Post = Parse.Object.extend("Post");	
+});
+
+// load history on list page
+jQuery( document ).on( "pageshow", "#listpage", function (event ) {
+	var query = new Parse.Query(Post);
+	query.find({
+		success: function(results) {
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) { 
+				var object = results[i];
+				var d = object.createdAt;
+				var month = d.getMonth()+1;
+				var day = d.getDay();
+				var year = d.getFullYear();
+				var hour = d.getHours();
+				var mins = d.getMinutes();
+				var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
+				var mood = object.get("mood");
+				var reason = object.get("text");
+				$('#moods tr:last').after('<tr><td>' + date + '</td><td>' + mood + '</td><td>' + reason + '</td></tr>');
+			}
+		},
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+	});
 });
 
 function postit() {
@@ -10,7 +39,6 @@ function postit() {
 	var text = $("#text-1").val();
 	var mood = $("#slider").val();
 
-	var Post = Parse.Object.extend("Post");	
 	var post = new Post();
 	post.set("mood", mood);
 	post.set("text", text);
