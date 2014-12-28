@@ -3,8 +3,11 @@ var Post;
 
 // Set up app
 jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
+
+	// Initialize Parse
 	Parse.initialize("CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", "dhILThcP5vWwn0e5tlyIJYpan0EM0ZDzEK3ClV5a");
 
+	// Initialize Facebook
 	window.fbAsyncInit = function() {
 		Parse.FacebookUtils.init({ // this line replaces FB.init({
 			appId      : '320082134852887', // Facebook App ID
@@ -13,11 +16,7 @@ jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
 			xfbml      : true,  // initialize Facebook social plugins on the page
 			version    : 'v2.2' // point to the latest Facebook Graph API version
 		});
-		
-		// Run code after the Facebook SDK is loaded.
-		login();
 	};
-	
 	(function(d, s, id){
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) {return;}
@@ -26,8 +25,48 @@ jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
+	// Create Post class
 	Post = Parse.Object.extend("Post");
 });
+
+function postit() {
+// Callback from post button
+	var text = $("#text-1").val();
+	var mood = $("#slider").val();
+
+	var post = new Post();
+	post.set("mood", mood);
+	post.set("text", text);
+
+	var currentUser = Parse.User.current();
+	if (!currentUser) {
+		login(post)
+	} else {
+		savepost(post);
+	}
+}
+
+function savepost(post) {
+	// Save this post to the cloud
+	post.setACL(new Parse.ACL(Parse.User.current()));
+	post.save(null, {
+		success: function(post) {
+			var d = post.createdAt;
+			var date = d.getDate();
+			var month = d.getMonth()+1;
+			var year = d.getFullYear();
+			var hour = d.getHours();
+			var mins = d.getMinutes();
+			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+		},
+		error: function(gameScore, error) {
+			// Execute any logic that should take place if the save fails.
+			// error is a Parse.Error with an error code and message.
+			alert('Failed to create new object, with error code: ' + error.message);
+		}
+	});
+}
+
 
 // load history on list page
 jQuery( document ).on( "pageshow", "#listpage", function (event ) {
@@ -57,51 +96,26 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 	});
 });
 
-function postit() {
-// Callback from post button
-	var text = $("#text-1").val();
-	var mood = $("#slider").val();
-
-	var post = new Post();
-	post.set("mood", mood);
-	post.set("text", text);
-
-	post.save(null, {
-		success: function(post) {
-			var d = post.createdAt;
-			var date = d.getDate();
-			var month = d.getMonth()+1;
-			var year = d.getFullYear();
-			var hour = d.getHours();
-			var mins = d.getMinutes();
-			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
-		},
-		error: function(gameScore, error) {
-			// Execute any logic that should take place if the save fails.
-			// error is a Parse.Error with an error code and message.
-			alert('Failed to create new object, with error code: ' + error.message);
-		}
-	});
-
-}
-var user;
-function login() {
+function login(post) {
+	// login for the purposes of saving this post
 	Parse.FacebookUtils.logIn(null, {
-		success: function(user) {
-			if (!user.existed()) {
+		success: function(fbuser) {
+			if (!fbuser.existed()) {
 				alert("User signed up and logged in through Facebook!");
+				FB.api(
+					"/me",
+					function (response) {
+						if (response && !response.error) {
+							alert("Hi there " + response.name + "\nWelcome to MoodMaestro!");
+							fbuser.set("username", response.name);
+							fbuser.save(null,{});
+						}
+					}
+				);
 			} else {
 				alert("User logged in through Facebook!");
 			}
-			FB.api(
-				"/me",
-				function (response) {
-					if (response && !response.error) {
-						user = response;
-						alert("Hi there " + user.name + "\nWelcome to MoodMaestro!");
-					}
-				}
-			);
+			savepost(post);
 		},
 		error: function(user, error) {
 			alert("User cancelled the Facebook login or did not fully authorize.");
