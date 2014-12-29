@@ -1,10 +1,17 @@
-#home {
+#mainpage {
 /*    width: 600px;*/
     margin: auto;
     background: #C0C0C0;
+/*
     padding: 20px 60px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
+*/
+}
+
+.ui-bar-inherit {
+	background: #C0C0C0 !important;
+	border-color: #C0C0C0 !important;
 }
 
 .label {
@@ -41,7 +48,7 @@ td {
 	display: block;
 	margin-left: auto; 
 	margin-right: auto;
-	margin-bottom: 25px;
+	margin-top: 25px;
 }
 
 /* reach in to btn to set width and center */
