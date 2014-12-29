@@ -90,8 +90,9 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 					var mins = d.getMinutes();
 					var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
 					var mood = object.get("mood");
+					var image = getimageformood(mood);
 					var reason = object.get("text");
-					$('#moods tr:last').after("<tr class='mooddata'><td>" + date + "</td><td>" + mood + "</td><td>" + reason + "</td></tr>");
+					$('#mood-entries tr:first').after("<tr class='mooddata'><td class='mood-col'>" + mood + "<br/><img class='mini-emo' src='" + image + "' /></td><td class='reason-col'>" + reason + "</td><td class='when-col'>" + date + "</td></tr>");
 				}
 			},
 			error: function(error) {
@@ -138,3 +139,11 @@ function login() {
 	return promise;
 }
 
+function getimageformood(mood) {
+	// mapp mood number to an image name
+	if (mood <= 2) return "assets/worst-green.jpg";
+	if (mood <= 4) return "assets/bad.jpg";
+	if (mood <= 6) return "assets/ok.jpg";
+	if (mood <= 8) return "assets/good.jpg";
+	return "assets/best-orange";
+}
