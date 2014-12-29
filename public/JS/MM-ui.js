@@ -38,12 +38,11 @@ function postit() {
 	post.set("mood", mood);
 	post.set("text", text);
 
-	var currentUser = Parse.User.current();
-	if (!currentUser) {
-		login(post)
-	} else {
+	login().then(function() {
 		savepost(post);
-	}
+	}, function() {
+		alert("Error logging in, can't save post");
+	});
 }
 
 function savepost(post) {
@@ -58,6 +57,7 @@ function savepost(post) {
 			var hour = d.getHours();
 			var mins = d.getMinutes();
 			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+			$("#text-1").val(''); // clear text
 		},
 		error: function(gameScore, error) {
 			// Execute any logic that should take place if the save fails.
@@ -70,34 +70,47 @@ function savepost(post) {
 
 // load history on list page
 jQuery( document ).on( "pageshow", "#listpage", function (event ) {
-	var query = new Parse.Query(Post);
-	query.find({
-		success: function(results) {
-			// Do something with the returned Parse.Object values
-			$( "#moods .mooddata" ).remove();
-			for (var i = 0; i < results.length; i++) { 
-				var object = results[i];
-				var d = object.createdAt;
-				var month = d.getMonth()+1;
-				var day = d.getDate();
-				var year = d.getFullYear();
-				var hour = d.getHours();
-				var mins = d.getMinutes();
-				var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
-				var mood = object.get("mood");
-				var reason = object.get("text");
-				$('#moods tr:last').after("<tr class='mooddata'><td>" + date + "</td><td>" + mood + "</td><td>" + reason + "</td></tr>");
+
+	// Clear the existing table data, if any
+	$( "#moods .mooddata" ).remove();
+
+	// login if not already before querying for posts
+	login().then(function() {
+		var query = new Parse.Query(Post);
+		query.find({
+			success: function(results) {
+				// Do something with the returned Parse.Object values
+				for (var i = 0; i < results.length; i++) { 
+					var object = results[i];
+					var d = object.createdAt;
+					var month = d.getMonth()+1;
+					var day = d.getDate();
+					var year = d.getFullYear();
+					var hour = d.getHours();
+					var mins = d.getMinutes();
+					var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
+					var mood = object.get("mood");
+					var reason = object.get("text");
+					$('#moods tr:last').after("<tr class='mooddata'><td>" + date + "</td><td>" + mood + "</td><td>" + reason + "</td></tr>");
+				}
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
 			}
-			//$( "#moods" ).trigger( "create" );
-		},
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
+		});
 	});
 });
 
-function login(post) {
+function login() {
 	// login for the purposes of saving this post
+	var promise = new Parse.Promise();
+
+	var currentUser = Parse.User.current();
+	if (currentUser) {
+		promise.resolve();
+		return promise;
+	} 
+	
 	Parse.FacebookUtils.logIn(null, {
 		success: function(fbuser) {
 			if (!fbuser.existed()) {
@@ -115,10 +128,13 @@ function login(post) {
 			} else {
 				alert("User logged in through Facebook!");
 			}
-			savepost(post);
+			promise.resolve();
 		},
 		error: function(user, error) {
 			alert("User cancelled the Facebook login or did not fully authorize.");
+			promise.reject();
 		}
 	});
+	return promise;
 }
+
