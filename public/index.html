@@ -3,9 +3,12 @@
   <meta charset="utf-8">
 	<title>MoodMaestro</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<link rel="icon" 
       type="image/png" 
       href="http://moodmaestro.parseapp.com/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/tragedycomedy128.png">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -67,17 +70,25 @@
 	</div>
 	<div role="main" class="ui-content" id="home">
 	  
-	  <table  id="moods" >
+	  <table  id="moodheader" >
 		<thead>
 		  <tr>
-			<th >Mood</th>
-			<th >Why</th>
-			<th >When</th>
+			<th class="mood-col" >Mood</th>
+			<th class="reason-col">Why</th>
+			<th class="when-col">When</th>
 		  </tr>
 		</thead>
-		<tbody id="mood-entries"><tr/>
-		</tbody>
 	  </table>
+	  <div style="max-height: 600px; overflow: auto;">
+		<table id="moods">
+		  <tbody id="mood-entries"><tr/>
+<!--
+			<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
+			<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
+-->
+		  </tbody>
+		</table>
+	  </div>
 
 	</div>
 	<div data-role="footer">

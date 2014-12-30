@@ -41,7 +41,7 @@ function postit() {
 	login().then(function() {
 		savepost(post);
 	}, function() {
-		alert("Error logging in, can't save post");
+		delayedalert("Error logging in, can't save post");
 	});
 }
 
@@ -56,13 +56,13 @@ function savepost(post) {
 			var year = d.getFullYear();
 			var hour = d.getHours();
 			var mins = d.getMinutes();
-			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+			delayedalert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 		},
 		error: function(gameScore, error) {
 			// Execute any logic that should take place if the save fails.
 			// error is a Parse.Error with an error code and message.
-			alert('Failed to create new object, with error code: ' + error.message);
+			delayedalert('Failed to create new object, with error code: ' + error.message);
 		}
 	});
 }
@@ -90,13 +90,23 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 					var mins = d.getMinutes();
 					var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
 					var mood = object.get("mood");
-					var image = getimageformood(mood);
+					var moodname = getnameformood(mood);
 					var reason = object.get("text");
-					$('#mood-entries tr:first').after("<tr class='mooddata'><td class='mood-col'>" + mood + "<br/><img class='mini-emo' src='" + image + "' /></td><td class='reason-col'>" + reason + "</td><td class='when-col'>" + date + "</td></tr>");
+
+					$('#mood-entries tr:first').after
+					(
+						"<tr class='mooddata " + moodname + "-mood'>" +
+                           "<td class='mood-col'>" + mood + "<br/>" +
+                              "<img class='mini-emo' src='assets/" + moodname + ".jpg' />" +
+                           "</td>" +
+                           "<td class='reason-col'>" + reason + "</td>" +
+                           "<td class='when-col'>" + date + "</td>" +
+                        "</tr>"
+					);
 				}
 			},
 			error: function(error) {
-				alert("Error: " + error.code + " " + error.message);
+				delayedalert("Error: " + error.code + " " + error.message);
 			}
 		});
 	});
@@ -111,39 +121,57 @@ function login() {
 		promise.resolve();
 		return promise;
 	} 
-	
+
+	if ("standalone" in navigator && navigator.standalone) {
+		var permissionUrl = "https://m.facebook.com/dialog/oauth?client_id=320082134852887&response_type=code&redirect_uri=" + window.location;
+		delayedalert("opening:"+permissionUrl);
+		window.location = permissionUrl;
+		setTimeout(function(){promise.resolve();}, 1000);
+	} else {
+
 	Parse.FacebookUtils.logIn(null, {
 		success: function(fbuser) {
 			if (!fbuser.existed()) {
-				alert("User signed up and logged in through Facebook!");
+				
+				//delayedalert("User signed up and logged in through Facebook!");
 				FB.api(
 					"/me",
 					function (response) {
 						if (response && !response.error) {
-							alert("Hi there " + response.name + "\nWelcome to MoodMaestro!");
+							//delayedalert("Hi there " + response.name + "\nWelcome to MoodMaestro!");
 							fbuser.set("username", response.name);
 							fbuser.save(null,{});
 						}
 					}
 				);
 			} else {
-				alert("User logged in through Facebook!");
+			//	delayedalert('User logged in through Facebook');
 			}
 			promise.resolve();
 		},
 		error: function(user, error) {
-			alert("User cancelled the Facebook login or did not fully authorize.");
+			//delayedalert('User cancelled log in');
 			promise.reject();
 		}
 	});
+}
+
 	return promise;
 }
 
-function getimageformood(mood) {
-	// mapp mood number to an image name
-	if (mood <= 2) return "assets/worst-green.jpg";
-	if (mood <= 4) return "assets/bad.jpg";
-	if (mood <= 6) return "assets/ok.jpg";
-	if (mood <= 8) return "assets/good.jpg";
-	return "assets/best-orange";
+function getnameformood(mood) {
+	// map mood number to an image name and a class name
+	if (mood <= 2) return "worst";
+	if (mood <= 4) return "bad";
+	if (mood <= 6) return "ok";
+	if (mood <= 8) return "good";
+	return "best";
+}
+
+// http://stackoverflow.com/questions/2898740/iphone-safari-web-app-opens-links-in-new-window
+(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone");
+
+
+function delayedalert(text) {
+	setTimeout(function(){alert(text);},200);
 }

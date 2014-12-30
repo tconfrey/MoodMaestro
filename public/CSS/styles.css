@@ -1,12 +1,6 @@
-#mainpage {
-/*    width: 600px;*/
+#mainpage, #listpage, #moodheader {
     margin: auto;
     background: #C0C0C0;
-/*
-    padding: 20px 60px;
-    border: solid #ddd;
-    border-width: 0 1px 1px 1px;
-*/
 }
 
 .ui-bar-inherit {
@@ -28,15 +22,16 @@
 	display:none;
 }
 
-#moods {
+#moods, #moodheader {
 	border-style: solid;
 	width: 100%;
 }
-td {
+
+td, th {
 	border-style: solid;
 }
 .mood-col {
-	min-width: 60px;
+	min-width: 75px;
 	width: 75px;
 	max-width: 75px;
 }
@@ -58,6 +53,23 @@ td {
 	width: 50px;
 	height: 50px;
 }
+.worst-mood {
+	background-color: #C0E0C0;
+}
+.bad-mood {
+	background-color: #C0D0C0;
+}
+.ok-mood {
+	background-color: #C0C0C0;
+}
+.good-mood {
+	background-color: #D0C0C0;
+}
+.best-mood {
+	background-color: #E0C0C0;
+}
+
+
 
 .logo {
 	display: block;
