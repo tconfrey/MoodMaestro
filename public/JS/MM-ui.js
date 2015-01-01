@@ -21,7 +21,7 @@ jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) {return;}
 		js = d.createElement(s); js.id = id;
-		js.src = "http://connect.facebook.net/en_US/sdk.js";
+		js.src = "https://connect.facebook.net/en_US/sdk.js";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
@@ -41,7 +41,7 @@ function postit() {
 	login().then(function() {
 		savepost(post);
 	}, function() {
-		delayedalert("Error logging in, can't save post");
+		alert("Error logging in, can't save post");
 	});
 }
 
@@ -56,13 +56,13 @@ function savepost(post) {
 			var year = d.getFullYear();
 			var hour = d.getHours();
 			var mins = d.getMinutes();
-			delayedalert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 		},
 		error: function(gameScore, error) {
 			// Execute any logic that should take place if the save fails.
 			// error is a Parse.Error with an error code and message.
-			delayedalert('Failed to create new object, with error code: ' + error.message);
+			alert('Failed to create new object, with error code: ' + error.message);
 		}
 	});
 }
@@ -77,7 +77,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 	// login if not already before querying for posts
 	login().then(function() {
 		var query = new Parse.Query(Post);
-		query.find({
+		query.limit(1000).find({
 			success: function(results) {
 				// Do something with the returned Parse.Object values
 				for (var i = 0; i < results.length; i++) { 
@@ -106,7 +106,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 				}
 			},
 			error: function(error) {
-				delayedalert("Error: " + error.code + " " + error.message);
+				alert("Error: " + error.code + " " + error.message);
 			}
 		});
 	});
@@ -123,39 +123,36 @@ function login() {
 	} 
 
 	if ("standalone" in navigator && navigator.standalone) {
-		var permissionUrl = "https://m.facebook.com/dialog/oauth?client_id=320082134852887&response_type=code&redirect_uri=" + window.location;
-		delayedalert("opening:"+permissionUrl);
+		var permissionUrl = "https://m.facebook.com/dialog/oauth?client_id=" + appId + "&response_type=code&redirect_uri=" + window.location;
+		promise.reject();
 		window.location = permissionUrl;
-		setTimeout(function(){promise.resolve();}, 1000);
-	} else {
-
+} else {
 	Parse.FacebookUtils.logIn(null, {
 		success: function(fbuser) {
 			if (!fbuser.existed()) {
 				
-				//delayedalert("User signed up and logged in through Facebook!");
+				alert("User signed up and logged in through Facebook!");
 				FB.api(
 					"/me",
 					function (response) {
 						if (response && !response.error) {
-							//delayedalert("Hi there " + response.name + "\nWelcome to MoodMaestro!");
+							alert("Hi there " + response.name + "\nWelcome to MoodMaestro!");
 							fbuser.set("username", response.name);
 							fbuser.save(null,{});
 						}
 					}
 				);
 			} else {
-			//	delayedalert('User logged in through Facebook');
+				alert('User logged in through Facebook');
 			}
 			promise.resolve();
 		},
 		error: function(user, error) {
-			//delayedalert('User cancelled log in');
+			alert('User cancelled log in');
 			promise.reject();
 		}
 	});
 }
-
 	return promise;
 }
 
@@ -166,12 +163,4 @@ function getnameformood(mood) {
 	if (mood <= 6) return "ok";
 	if (mood <= 8) return "good";
 	return "best";
-}
-
-// http://stackoverflow.com/questions/2898740/iphone-safari-web-app-opens-links-in-new-window
-(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone");
-
-
-function delayedalert(text) {
-	setTimeout(function(){alert(text);},200);
 }
