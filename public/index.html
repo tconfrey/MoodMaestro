@@ -21,28 +21,38 @@
 </head>
 
 <body>
-  <div id="fb-root"></div>
+  <!--  <div id="fb-root"></div> -->
   <div data-role="page" id="mainpage">
 	<div data-role="header">
 	  <img class="logo" src="assets/MoodMaestro"/>
 	</div>
+
 	<div role="main" class="ui-content" >
+
+	  <div data-role="popup" id="overlay">
+		<h2 class="center">Welcome to MoodMaestro</h2>
+		<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of your highs and lows. See the List and Graph pages for overviews.</p>
+		<p>Obviously with an app of this type, security and privacy are key. Having exhausted the time I can put into it I'm releasing this version without user accounts. You can try it by out entering publicly visible posts that either capture your mood, or give me feedback on the app.</p>
+		<p>
+		  Cheers,<br/> Tony</p>
+	  </div>
+
 	  <div class="label">How's your mood?</div>
 	  <div class="ui-grid-d">
 		<div class="ui-block-a">
-			<img class="emo" src="assets/worst.jpg" />
+		  <img class="emo" src="assets/worst.jpg" />
 		</div>
 		<div class="ui-block-b">
-			<img class="emo" src="assets/bad.jpg" />
+		  <img class="emo" src="assets/bad.jpg" />
 		</div>
 		<div class="ui-block-c">
-			<img class="emo" src="assets/ok.jpg" />
+		  <img class="emo" src="assets/ok.jpg" />
 		</div>
 		<div class="ui-block-d">
-			<img class="emo" src="assets/good.jpg" />
+		  <img class="emo" src="assets/good.jpg" />
 		</div>
 		<div class="ui-block-e">
-			<img class="emo" src="assets/best.jpg" />
+		  <img class="emo" src="assets/best.jpg" />
 		</div>
 	  </div>
 
@@ -82,10 +92,10 @@
 	  <div style="max-height: 600px; overflow: auto;">
 		<table id="moods">
 		  <tbody id="mood-entries"><tr/>
-<!--
+			<!--
+				<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
 			<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
-			<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
--->
+			-->
 		  </tbody>
 		</table>
 	  </div>
@@ -106,14 +116,14 @@
 	  <img class="logo" src="assets/MoodMaestro"/>
 	</div>
 	<div role="main" class="ui-content">
-<!--
-<div
-  class="fb-like"
-  data-share="true"
-  data-width="450"
-  data-show-faces="true">
-</div>
--->
+	  <!--
+		  <div
+			 class="fb-like"
+			 data-share="true"
+			 data-width="450"
+			 data-show-faces="true">
+		  </div>
+		  -->
 	</div>
 	<div data-role="footer">
 	  <div data-role="navbar">

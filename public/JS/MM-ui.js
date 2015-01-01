@@ -68,6 +68,16 @@ function savepost(post) {
 }
 
 
+jQuery( document ).on( "pageshow", "#mainpage", function (event ) {
+	// Display informational overlay popup until fourth visit
+	var visits = getCookie("visits") || 0 ;
+	if (visits < 4) {		
+		setTimeout("$('#overlay').popup('open')", 100); 
+	}
+	setCookie("visits", parseInt(visits) + 1);
+});
+
+
 // load history on list page
 jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 
@@ -163,4 +173,18 @@ function getnameformood(mood) {
 	if (mood <= 6) return "ok";
 	if (mood <= 8) return "good";
 	return "best";
+}
+
+
+// copied from http://stackoverflow.com/questions/1458724/how-to-set-unset-cookie-with-jquery
+function setCookie(key, value) {
+    var expires = new Date();
+    expires.setTime(expires.getTime() + (3 * 24 * 60 * 60 * 1000));
+	var newcookie = key + '=' + value + ';expires=' + expires.toUTCString();
+    document.cookie = newcookie;
+}
+
+function getCookie(key) {
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
 }
