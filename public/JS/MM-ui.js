@@ -42,6 +42,7 @@ function postit() {
 
 	login().then(function() {
 		savepost(post);
+		$.mobile.navigate( "#listpage" );
 	}, function() {
 		alert("Error logging in, can't save post");
 	});
@@ -96,7 +97,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 			function(success) {			
 				for (var i = 0; i < posts.length; i++) { 
 					var post = posts[i];
-					var d = post.serverobj.createdAt;
+					var d = post.serverobj.updatedAt;
 					var month = d.getMonth()+1;
 					var day = d.getDate();
 					var year = d.getFullYear();
@@ -137,7 +138,7 @@ function query() {
 		return promise;
 	}
 	var qry = new Parse.Query(Post);
-	qry.limit(1000).ascending("createdAt").find({
+	qry.limit(1000).ascending("updatedAt").find({
 		success: function(results) {
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) { 
@@ -146,7 +147,7 @@ function query() {
 				post.mood = results[i].get("mood");
 				post.reason = results[i].get("text");
 				// These next attributes are added so I can use the same objs for graphs
-				post.x = results[i].createdAt;
+				post.x = results[i].updatedAt;
 				post.y = parseInt(post.mood);
 				post.name = post.reason;
 				posts.push(post);
