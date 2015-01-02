@@ -102,7 +102,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 					var hour = d.getHours();
 					var mins = d.getMinutes();
 					mins = (mins <10) ? "0"+mins : mins; // leading 0
-					var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
+					var date = hour+":"+mins+" on <br/>"+month+"/"+day+"/"+year;
 					var moodname = getnameformood(post.mood);
 
 					$('#mood-entries tr:first').after
@@ -131,6 +131,10 @@ var posts = [];
 function query() {
 	// query for mood objects
 	var promise = new Parse.Promise();
+	if (posts.length > 0) {		// aready done
+		promise.resolve();
+		return promise;
+	}
 	var qry = new Parse.Query(Post);
 	qry.limit(1000).ascending("createdAt").find({
 		success: function(results) {
@@ -234,7 +238,7 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 			function(success) {	
 				$('#container').highcharts({
 					chart: {
-						type: 'spline',
+						type: 'areaspline',
 						zoomType: 'x'
 					},
 					title: {
@@ -252,13 +256,15 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 					yAxis: {
 						title: {
 							text: 'Mood'
-						}
+						},
+						max: 10,
+						min: 0
 					},
 					legend: {
 						enabled: false
 					},
 					plotOptions: {
-						area: {
+						areaspline: {
 							fillColor: {
 								linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
 								stops: [
@@ -275,12 +281,12 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 									lineWidth: 1
 								}
 							},
-							threshold: null
+							threshold: 5
 						}
 					},
 
 					series: [{
-						type: 'area',
+						/*type: 'spline',*/
 						name: 'Mood',
 						data: posts
 					}]
