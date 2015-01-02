@@ -2,11 +2,12 @@
 var Post;
 
 // Set up app
-jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
+jQuery( document ).on( "pagecreate", function( event ) {
 
 	// Initialize Parse
 	Parse.initialize("CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", "dhILThcP5vWwn0e5tlyIJYpan0EM0ZDzEK3ClV5a");
 
+/* Hiding Accounts !!!!!
 	// Initialize Facebook
 	window.fbAsyncInit = function() {
 		Parse.FacebookUtils.init({ // this line replaces FB.init({
@@ -24,6 +25,7 @@ jQuery( document ).on( "pageinit", "#mainpage", function( event ) {
 		js.src = "https://connect.facebook.net/en_US/sdk.js";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
+*/
 
 	// Create Post class
 	Post = Parse.Object.extend("Post");
@@ -47,7 +49,9 @@ function postit() {
 
 function savepost(post) {
 	// Save this post to the cloud
+/* Hiding Accounts !!!!!
 	post.setACL(new Parse.ACL(Parse.User.current()));
+*/
 	post.save(null, {
 		success: function(post) {
 			var d = post.createdAt;
@@ -67,12 +71,13 @@ function savepost(post) {
 	});
 }
 
-
+var showoverlay = true;
 jQuery( document ).on( "pageshow", "#mainpage", function (event ) {
 	// Display informational overlay popup until fourth visit
 	var visits = getCookie("visits") || 0 ;
-	if (visits < 4) {		
-		setTimeout("$('#overlay').popup('open')", 100); 
+	if (showoverlay && (visits < 4)) {		
+		setTimeout("$('#overlay').popup('open')", 100);
+		showoverlay = false;	// don't show after first time, per visit
 	}
 	setCookie("visits", parseInt(visits) + 1);
 });
@@ -86,46 +91,75 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 
 	// login if not already before querying for posts
 	login().then(function() {
-		var query = new Parse.Query(Post);
-		query.limit(1000).find({
-			success: function(results) {
-				// Do something with the returned Parse.Object values
-				for (var i = 0; i < results.length; i++) { 
-					var object = results[i];
-					var d = object.createdAt;
+		query().then(
+			function(success) {			
+				for (var i = 0; i < posts.length; i++) { 
+					var post = posts[i];
+					var d = post.serverobj.createdAt;
 					var month = d.getMonth()+1;
 					var day = d.getDate();
 					var year = d.getFullYear();
 					var hour = d.getHours();
 					var mins = d.getMinutes();
+					mins = (mins <10) ? "0"+mins : mins; // leading 0
 					var date = hour+":"+mins+" on "+month+"/"+day+"/"+year;
-					var mood = object.get("mood");
-					var moodname = getnameformood(mood);
-					var reason = object.get("text");
+					var moodname = getnameformood(post.mood);
 
 					$('#mood-entries tr:first').after
 					(
 						"<tr class='mooddata " + moodname + "-mood'>" +
-                           "<td class='mood-col'>" + mood + "<br/>" +
-                              "<img class='mini-emo' src='assets/" + moodname + ".jpg' />" +
-                           "</td>" +
-                           "<td class='reason-col'>" + reason + "</td>" +
-                           "<td class='when-col'>" + date + "</td>" +
-                        "</tr>"
+							"<td class='mood-col'>" + post.mood + "<br/>" +
+							"<img class='mini-emo' src='assets/" + moodname + ".jpg' />" +
+							"</td>" +
+							"<td class='reason-col'>" + post.reason + "</td>" +
+							"<td class='when-col'>" + date + "</td>" +
+							"</tr>"
 					);
 				}
 			},
-			error: function(error) {
+			function(error) {
 				alert("Error: " + error.code + " " + error.message);
 			}
-		});
+		);
+	}
+				);
 	});
-});
+
+// local storage for posts queried from cloud
+var posts = [];
+
+function query() {
+	// query for mood objects
+	var promise = new Parse.Promise();
+	var qry = new Parse.Query(Post);
+	qry.limit(1000).ascending("createdAt").find({
+		success: function(results) {
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) { 
+				var post = new Object();
+				post.serverobj = results[i];
+				post.mood = results[i].get("mood");
+				post.reason = results[i].get("text");
+				// These next attributes are added so I can use the same objs for graphs
+				post.x = results[i].createdAt;
+				post.y = parseInt(post.mood);
+				post.name = post.reason;
+				posts.push(post);
+			}
+			promise.resolve();
+		},
+		error: function(error) {
+			promise.reject("Error: " + error.code + " " + error.message);
+		}
+	})
+	return promise;
+}
 
 function login() {
 	// log in if not already
 	var promise = new Parse.Promise();
 
+/* Hiding Accounts !!!!!
 	var currentUser = Parse.User.current();
 	if (currentUser) {
 		promise.resolve();
@@ -163,6 +197,8 @@ function login() {
 		}
 	});
 }
+*/
+	promise.resolve();
 	return promise;
 }
 
@@ -188,3 +224,67 @@ function getCookie(key) {
     var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return keyValue ? keyValue[2] : null;
 }
+
+
+// load history on graph page
+jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
+	// login if not already before querying for posts
+	login().then(function() {
+		query().then(
+			function(success) {	
+				$('#container').highcharts({
+					chart: {
+						type: 'spline',
+						zoomType: 'x'
+					},
+					title: {
+						text: 'Mood Graph'
+					},
+					subtitle: {
+						text: document.ontouchstart === undefined ?
+							'Click and drag in the plot area to zoom in' :
+							'Pinch the chart to zoom in'
+					},
+					xAxis: {
+						type: 'datetime',
+						minRange: 2 * 24 * 3600000 // five days
+					},
+					yAxis: {
+						title: {
+							text: 'Mood'
+						}
+					},
+					legend: {
+						enabled: false
+					},
+					plotOptions: {
+						area: {
+							fillColor: {
+								linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+								stops: [
+									[0, '#E0C0C0'],
+									[1, '#C0E0C0']
+								]
+							},
+							marker: {
+								radius: 3
+							},
+							lineWidth: 2,
+							states: {
+								hover: {
+									lineWidth: 1
+								}
+							},
+							threshold: null
+						}
+					},
+
+					series: [{
+						type: 'area',
+						name: 'Mood',
+						data: posts
+					}]
+				});
+			});
+	});
+});
