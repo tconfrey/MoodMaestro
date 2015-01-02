@@ -62,6 +62,7 @@ function savepost(post) {
 			var mins = d.getMinutes();
 			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
+			posts = [];			  // reload data as needed
 		},
 		error: function(gameScore, error) {
 			// Execute any logic that should take place if the save fails.
