@@ -99,6 +99,12 @@ td, th {
 	margin-right: auto;
 }
 
+.small-text {
+	font-size: 9pt;
+	float: right;
+	margin-top: -15pt;
+	margin-bottom: 0pt;
+}
 /* From Parse boilerplate: */
 /*
 body {

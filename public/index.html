@@ -34,17 +34,18 @@
 		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 		<h2 class="center">Welcome to MoodMaestro</h2>
 		<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of your highs and lows. See the List and Graph pages for overviews.</p>
-		<p>Obviously with an app of this type, security and privacy are key. Having exhausted the time I can put into it I'm releasing this version without user accounts. You can try it by out entering publicly visible posts that either capture your mood, or give me feedback on the app.</p>
+		<p>Obviously with an app of this type, security and privacy are key. Having exhausted the time I can put into it for now, I'm releasing this version without user accounts. You can try it by out entering publicly visible posts that either capture your mood, or give me feedback on the app.</p>
 		<p>
 		  Cheers,<br/> Tony</p>
 	  </div>
 
 	  <div data-role="popup" id="popupform" data-theme="a" class="ui-corner-all">
           <div style="padding:10px 20px;">
-            <h3>Name to post under</h3>
+            <h3>Name to post under:</h3>
+			<p class="small-text"><i>(temporary)</i></p>
             <label for="un" class="ui-hidden-accessible">Name:</label>
             <input type="text" id="namefield" value="anon" placeholder="username" data-theme="a">
-            <button type="submit" onclick="setname()" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Post</button>
+            <button onclick="setname()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Post</button>
           </div>
 	  </div>
 
