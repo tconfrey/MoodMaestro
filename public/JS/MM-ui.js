@@ -38,9 +38,9 @@ function postit() {
 
 	var post = new Post();
 	post.set("mood", mood);
-	post.set("text", text);
 
 	login().then(function() {
+		post.set("text", text+" - " + name); // add global name set via login
 		savepost(post);
 		$.mobile.navigate( "#listpage" );
 	}, function() {
@@ -50,7 +50,7 @@ function postit() {
 
 function savepost(post) {
 	// Save this post to the cloud
-/* Hiding Accounts !!!!!
+/* Hiding  Accounts !!!!!
 	post.setACL(new Parse.ACL(Parse.User.current()));
 */
 	post.save(null, {
@@ -61,7 +61,7 @@ function savepost(post) {
 			var year = d.getFullYear();
 			var hour = d.getHours();
 			var mins = d.getMinutes();
-			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+//			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 			posts = [];			  // reload data as needed
 		},
@@ -92,7 +92,9 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 	$( "#moods .mooddata" ).remove();
 
 	// login if not already before querying for posts
+/* Hiding Accounts !!!!!
 	login().then(function() {
+*/
 		query().then(
 			function(success) {			
 				for (var i = 0; i < posts.length; i++) { 
@@ -123,9 +125,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 				alert("Error: " + error.code + " " + error.message);
 			}
 		);
-	}
-				);
-	});
+});
 
 // local storage for posts queried from cloud
 var posts = [];
@@ -161,11 +161,38 @@ function query() {
 	return promise;
 }
 
+var name = "";
+var namepromiseptr;
+function getname() {
+	// Get user name to file under
+	var namepromise = new Parse.Promise();
+	namepromiseptr = namepromise; 		// global var, horrible form!
+	$('#popupform').popup('open');	// open form, its post will resolve promise
+	return namepromise;
+}
+function setname() {
+	// called on popupform button
+	name = $("#namefield").val();
+	$('#popupform').popup('close');
+	$.mobile.navigate( "#listpage" );
+	namepromiseptr.resolve();
+}
+
 function login() {
 	// log in if not already
-	var promise = new Parse.Promise();
+	var loginpromise = new Parse.Promise();
+	if (name.length == 0) {
+		getname().then(
+			function(success) {
+				loginpromise.resolve();
+			});
+	} else {
+		loginpromise.resolve();
+	}
+	return loginpromise;
 
-/* Hiding Accounts !!!!!
+
+/* Hiding FB Accounts !!!!!
 	var currentUser = Parse.User.current();
 	if (currentUser) {
 		promise.resolve();
@@ -204,8 +231,6 @@ function login() {
 	});
 }
 */
-	promise.resolve();
-	return promise;
 }
 
 function getnameformood(mood) {
@@ -235,7 +260,9 @@ function getCookie(key) {
 // load history on graph page
 jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 	// login if not already before querying for posts
+/* Hiding Accounts !!!!!
 	login().then(function() {
+*/
 		query().then(
 			function(success) {	
 				$('#container').highcharts({
@@ -294,5 +321,4 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 					}]
 				});
 			});
-	});
 });
