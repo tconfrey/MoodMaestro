@@ -26,6 +26,7 @@
   <div data-role="page" id="mainpage">
 	<div data-role="header">
 	  <img class="logo" src="assets/MoodMaestro"/>
+	  <a href="#aboutpage" data-role="button" data-icon="info" class="aboutbtn" data-iconpos="notext" data-transition="flip">info</a>
 	</div>
 
 	<div role="main" class="ui-content" >
@@ -135,6 +136,28 @@
 		<ul>
 		  <li><a href="#mainpage">Main</a></li>
 		  <li><a href="#listpage">List</a></li>
+		</ul>
+	  </div><!-- /navbar -->
+	</div>
+  </div>
+
+
+  <div data-role="page" id="aboutpage">
+	<div data-role="header">
+	  <img class="logo" src="assets/MoodMaestro"/>
+	</div>
+	<div role="main" class="ui-content">
+	  <p>MoodMaestro is an app I wrote for the desktop as a gift to my son Nick a few years ago. Nick is an avid life tracker and he had been looking for some way to track his moods. So MoodMaestro has been letting him do that for the last five years such that at this point he has all of his high school and first year of college documented in brief synopses along with a numeric mood.</p>
+	  <p>I've been meaning ever since to write it as a web/mobile app. I took the opportunity of my recent break around the Holidays to take a run at it, and got entirely too sucked in. This version of MM is the end result. I didn't get as far as I would have liked but further than I expected to.</p>
+	  <p>The goal is to allow private account creation optionally linked to a Facebook account. (I had it mostly working but the FB integration on mobile brought me down the path of some whitescreen bug that I banged my head against for a day!) The data should be always secure and private with the option to make public, and groups could potentially use it to track collective sentiment. </p>
+	  <p>The current skin is based on the original, and uses pictures of Nick and my other son Jack (and the anonymous screaming green baby), and my thoughts at the time on where happiness and sadness placed on the color wheel. Originally I used a -5 to 5 scale but we decided to go for 1-10 as maybe simpler.</p>
+	  <p>I'd love any feedback on the concept, ideas for color schemes/numeric ratings strategies, or anything else. Adding public posts with examples usages or suggestions would be cool, alternately email me at my gmail account (which is guessable).</p>
+	  <p>Cheers,<br>&nbsp;&nbsp;&nbsp;Tony</p>
+	</div>
+	<div data-role="footer" data-position="fixed">
+	  <div data-role="navbar">
+		<ul>
+		  <li><a data-rel="back" data-direction="reverse" data-transition="flip" href="">Back</a></li>
 		</ul>
 	  </div><!-- /navbar -->
 	</div>
