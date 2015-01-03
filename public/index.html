@@ -34,7 +34,7 @@
 		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 		<h2 class="center">Welcome to MoodMaestro</h2>
 		<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of your highs and lows. See the List and Graph pages for overviews.</p>
-		<p>Obviously with an app of this type, security and privacy are key. Having exhausted the time I can put into it for now, I'm releasing this version without user accounts. You can try it by out entering publicly visible posts that either capture your mood, or give me feedback on the app.</p>
+		<p>For this app security and privacy are key. Having exhausted the time I can put into it for now, I'm releasing this version without user accounts. You can try it out by entering publicly visible posts that either capture your mood or give me feedback on the app.</p>
 		<p>
 		  Cheers,<br/> Tony</p>
 	  </div>
@@ -74,7 +74,7 @@
 	  <input type="text" name="text-1" id="text-1" value=""/>
 	  <input type="button" class="ui-btn" id="postit" value="Post It" onclick="postit()" />
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" data-position="fixed">
 	  <div data-role="navbar">
 		<ul>
 		  <li><a href="#listpage">List</a></li>
@@ -113,7 +113,7 @@
 	  </div>
 
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" data-position="fixed">
 	  <div data-role="navbar">
 		<ul>
 		  <li><a href="#mainpage">Main</a></li>
@@ -128,19 +128,9 @@
 	  <img class="logo" src="assets/MoodMaestro"/>
 	</div>
 	<div role="main" class="ui-content">
-
-	  <div id="container" style="width:95%; height:400px;"></div>
-
-	  <!--
-		  <div
-			 class="fb-like"
-			 data-share="true"
-			 data-width="450"
-			 data-show-faces="true">
-		  </div>
-		  -->
+	  <div id="graphcontainer"></div>
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" data-position="fixed">
 	  <div data-role="navbar">
 		<ul>
 		  <li><a href="#mainpage">Main</a></li>

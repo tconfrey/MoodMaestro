@@ -78,7 +78,7 @@ jQuery( document ).on( "pageshow", "#mainpage", function (event ) {
 	// Display informational overlay popup until fourth visit
 	var visits = getCookie("visits") || 0 ;
 	if (showoverlay && (visits < 4)) {		
-		setTimeout("$('#overlay').popup('open')", 100);
+		setTimeout("$('#overlay').popup('open')", 250);
 		showoverlay = false;	// don't show after first time, per visit
 	}
 	setCookie("visits", parseInt(visits) + 1);
@@ -265,7 +265,7 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 */
 		query().then(
 			function(success) {	
-				$('#container').highcharts({
+				$('#graphcontainer').highcharts({
 					chart: {
 						type: 'areaspline',
 						zoomType: 'x'
@@ -280,14 +280,16 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 					},
 					xAxis: {
 						type: 'datetime',
-						minRange: 2 * 24 * 3600000 // five days
+						tickInterval: 24 * 3600 * 1000,
+						minRange: 24 * 3600000 // day
 					},
 					yAxis: {
 						title: {
 							text: 'Mood'
 						},
 						max: 10,
-						min: 0
+						min: 0,
+						tickInterval: 2
 					},
 					legend: {
 						enabled: false
