@@ -13,7 +13,6 @@
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-	<link rel="stylesheet" href="CSS/reset.css">
 	<link rel="stylesheet" href="CSS/styles.css">
 	<script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
 	<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
@@ -24,9 +23,9 @@
 <body>
   <!--  <div id="fb-root"></div> -->
   <div data-role="page" id="mainpage">
-	<div data-role="header">
+	<div id="buttonparent" data-role="header">
 	  <img class="logo" src="assets/MoodMaestro"/>
-	  <a href="#aboutpage" data-role="button" data-icon="info" class="aboutbtn" data-transition="flip">about</a><!-- data-iconpos="notext"  -->
+	  <a id="aboutbtn" href="#aboutpage" data-role="button" data-icon="info" class="aboutbtn" data-transition="flip" data-iconpos="notext" >about</a>
 	</div>
 
 	<div role="main" class="ui-content" >
@@ -35,7 +34,7 @@
 		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
 		<h2 class="center">Welcome to MoodMaestro</h2>
 		<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of highs and lows. The List and Graph pages show overviews.</p>
-		<p>For this app security and privacy are key. Having exhausted the time I can put into it for now, I'm releasing this version without user accounts. You can try it out by entering publicly visible posts that either capture your mood or give me feedback on the app. See the about button for more background.</p>
+		<p>For this app security and privacy are key. Having exhausted the time I can put into it for now, I'm releasing this version without user accounts. You can try it out by entering publicly visible posts that either capture your mood or give me feedback on the app. See the info button for more background.</p>
 		<p>
 		  Cheers,<br/>&nbsp;&nbsp;&nbsp;Tony</p>
 	  </div>
