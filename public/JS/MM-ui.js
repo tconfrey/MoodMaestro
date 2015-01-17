@@ -39,7 +39,7 @@ function postit() {
 	var post = new Post();
 	post.set("mood", mood);
 
-	login().then(function() {
+	offerlogin().then(function() {
 		post.set("text", text+" - " + name); // add global name set via login
 		savepost(post);
 		$.mobile.navigate( "#listpage" );
@@ -163,6 +163,7 @@ function query() {
 
 var name = "";
 var namepromiseptr;
+var user;
 function getname() {
 	// Get user name to file under
 	var namepromise = new Parse.Promise();
@@ -178,10 +179,10 @@ function setname() {
 	namepromiseptr.resolve();
 }
 
-function login() {
-	// log in if not already
+function offerlogin() {
+	// offer log in if not already
 	var loginpromise = new Parse.Promise();
-	if (name.length == 0) {
+	if (!user) {
 		getname().then(
 			function(success) {
 				loginpromise.resolve();

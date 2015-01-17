@@ -40,12 +40,16 @@
 	  </div>
 
 	  <div data-role="popup" id="popupform" data-theme="a" class="ui-corner-all">
-          <div style="padding:10px 20px;">
-            <h3>Name to post under:</h3>
-			<p class="small-text"><i>(temporary)</i></p>
+          <div style="padding:10px 20px;" class="ui-corner-all" id="publicpost">
+            <h3>Name for public post:</h3>
             <label for="un" class="ui-hidden-accessible">Name:</label>
             <input type="text" id="namefield" value="anon" placeholder="username" data-theme="a">
             <button onclick="setname()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Post</button>
+          </div>
+          <div style="padding:10px 20px;" class="ui-corner-all" id="launchlogin">
+            <h3>Or Login:</h3>
+			<p class="small-text">Use your Facebook login to access a private MoodMaestro account</p>
+            <button onclick="alert('Not yet implemented!');" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Log In</button>
           </div>
 	  </div>
 

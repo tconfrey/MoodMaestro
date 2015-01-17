@@ -37,4 +37,4 @@ Parse.Cloud.beforeSave("Post", function(request, response) {
 	}, function(error) {
 		response.error();
 	});
-}
+});

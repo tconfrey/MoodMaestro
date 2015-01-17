@@ -115,3 +115,18 @@ td, th {
 	float: right;
 /*	data-iconpos: notext; */
 }
+
+#publicpost {
+	float: left;
+	width: 200px;
+}
+
+#launchlogin {
+	margin-left: 250px;
+	width: 200px;
+}
+
+.small-text {
+	padding-top: 20px;
+	padding-bottom: 15px;
+}
