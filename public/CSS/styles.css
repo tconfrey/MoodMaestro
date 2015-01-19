@@ -92,13 +92,6 @@ td, th {
 	margin-top: 20px;
 }
 
-/* reach in to btn to set width and center */
-.ui-input-btn {
-	width: 150px !important;
-	margin-left: auto;
-	margin-right: auto;
-}
-
 .small-text {
 	font-size: 9pt;
 	float: right;
@@ -116,6 +109,11 @@ td, th {
 /*	data-iconpos: notext; */
 }
 
+#popupform {
+	max-width: 350px;
+}
+
+/*
 #publicpost {
 	float: left;
 	width: 200px;
@@ -125,8 +123,60 @@ td, th {
 	margin-left: 250px;
 	width: 200px;
 }
-
+*/
 .small-text {
-	padding-top: 20px;
+	padding-top: 10px;
 	padding-bottom: 15px;
 }
+
+#postbuttoncontainer {
+	width: 250px !important;
+	margin-left: 50%;
+	padding-bottom: 42px;
+}
+
+/* copied split button from here: 
+   https://github.com/smashingboxes/splitdropbutton/blob/master/jquery.splitdropbutton.js
+   Some pretty messy CSS to get it to align like I needed */
+.split-btn .spb-toggle {
+	font-size: 24px;
+	background: #f6f6f6;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	padding-bottom: 40px;
+}
+.spb-primary {
+	width: 250px  !important;
+	border-top-left-radius: 5px;
+}
+.spb-secondary {
+	width: 250px  !important;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.spb-toggle {
+	margin-left: 1px;
+}
+.split-btn a {
+	padding:  10px;
+	color: black;
+	text-align: center;
+	text-decoration: none;
+}
+.spb-primary a {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	background: #f6f6f6;
+}
+.spb-secondary a {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	background: #f6f6f6;
+}
+.split-btn a:hover {
+    background: #e8e8e8;
+	color: #000;
+}
+
+// it's important to style the links with .split-btn a instead of '.spb-primary a' or
+// '.spb-secondary a' because those divs have widths based on the length of '.split-btn a'

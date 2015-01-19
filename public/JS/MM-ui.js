@@ -7,7 +7,7 @@ jQuery( document ).on( "pagecreate", function( event ) {
 	// Initialize Parse
 	Parse.initialize("CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", "dhILThcP5vWwn0e5tlyIJYpan0EM0ZDzEK3ClV5a");
 
-/* Hiding Accounts !!!!!
+
 	// Initialize Facebook
 	window.fbAsyncInit = function() {
 		Parse.FacebookUtils.init({ // this line replaces FB.init({
@@ -25,10 +25,17 @@ jQuery( document ).on( "pagecreate", function( event ) {
 		js.src = "https://connect.facebook.net/en_US/sdk.js";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
-*/
+
 
 	// Create Post class
 	Post = Parse.Object.extend("Post");
+});
+
+//$(document).ready
+$(window).load(function(){
+  $('.split-btn').splitdropbutton({
+    toggleDivContent: '<i class="fa fa-sort-desc" style="margin-left: 15px;"></i>' // optional html content for the clickable toggle div
+  })
 });
 
 function postit() {
@@ -40,7 +47,7 @@ function postit() {
 	post.set("mood", mood);
 
 	offerlogin().then(function() {
-		post.set("text", text+" - " + name); // add global name set via login
+		post.set("text", text + " - " + name); // add global name set via login
 		savepost(post);
 		$.mobile.navigate( "#listpage" );
 	}, function() {
@@ -51,7 +58,9 @@ function postit() {
 function savepost(post) {
 	// Save this post to the cloud
 /* Hiding  Accounts !!!!!
-	post.setACL(new Parse.ACL(Parse.User.current()));
+   if (user) {
+   post.setACL(new Parse.ACL(Parse.User.current()));
+	}
 */
 	post.save(null, {
 		success: function(post) {
