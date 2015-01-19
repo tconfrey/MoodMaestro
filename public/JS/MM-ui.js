@@ -1,6 +1,10 @@
 // global classes
 var Post;
 
+// Cached variables
+var name = "";
+var namepromiseptr;
+
 // Set up app
 jQuery( document ).on( "pagecreate", function( event ) {
 
@@ -26,42 +30,63 @@ jQuery( document ).on( "pagecreate", function( event ) {
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
-
 	// Create Post class
 	Post = Parse.Object.extend("Post");
 });
 
-//$(document).ready
+//Set up the split button plugin. See CSS for more details. This was: $(document).ready
 $(window).load(function(){
   $('.split-btn').splitdropbutton({
     toggleDivContent: '<i class="fa fa-sort-desc" style="margin-left: 15px;"></i>' // optional html content for the clickable toggle div
   })
 });
 
-function postit() {
+function postit(private) {
 // Callback from post button
 	var text = $("#text-1").val();
 	var mood = $("#slider").val();
 
 	var post = new Post();
 	post.set("mood", mood);
+	post.set("text", text);
+	post.set("private", private);
 
-	offerlogin().then(function() {
-		post.set("text", text + " - " + name); // add global name set via login
-		savepost(post);
-		$.mobile.navigate( "#listpage" );
-	}, function() {
-		alert("Error logging in, can't save post");
-	});
+	if (Parse.User.current()) {
+		savepost(post).then(
+			function() {
+				$.mobile.navigate( "#listpage" );
+			});
+	} else {
+		offerlogin().then(function() {
+			savepost(post).then(
+				function() {
+					$.mobile.navigate( "#listpage" );
+				});
+		}, function() {
+			alert("Error logging in, can't save post");
+		});
+	}
 }
 
 function savepost(post) {
-	// Save this post to the cloud
-/* Hiding  Accounts !!!!!
-   if (user) {
-   post.setACL(new Parse.ACL(Parse.User.current()));
+	// Save this post to the cloud. 
+	// 3 possibilities: Logged in user private post (set ACL), logged in user public post (set attribution), anonymous user public post.
+
+	// Set access control on private posts
+	if (Parse.User.current() && post.get("private")) {
+		post.setACL(new Parse.ACL(Parse.User.current()));
 	}
-*/
+	// Set attribution on public posts
+	if (Parse.User.current() && !post.get("private")) {
+		var uname = Parse.User.current().get("username");
+		post.set("text", post.get("text") + " - " + uname);
+	}
+	// Set attribution on anonymous posts
+	if (name) {
+		post.set("text", post.get("text") + " - " + name);
+	}
+
+	var savepromise = new Parse.Promise();
 	post.save(null, {
 		success: function(post) {
 			var d = post.createdAt;
@@ -70,16 +95,19 @@ function savepost(post) {
 			var year = d.getFullYear();
 			var hour = d.getHours();
 			var mins = d.getMinutes();
-//			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 			posts = [];			  // reload data as needed
+			savepromise.resolve();
 		},
 		error: function(gameScore, error) {
 			// Execute any logic that should take place if the save fails.
 			// error is a Parse.Error with an error code and message.
 			alert('Failed to create new object, with error code: ' + error.message);
+			savepromise.reject();
 		}
 	});
+	return savepromise;
 }
 
 var showoverlay = true;
@@ -170,50 +198,16 @@ function query() {
 	return promise;
 }
 
-var name = "";
-var namepromiseptr;
-var user;
-function getname() {
-	// Get user name to file under
-	var namepromise = new Parse.Promise();
-	namepromiseptr = namepromise; 		// global var, horrible form!
-	$('#popupform').popup('open');	// open form, its post will resolve promise
-	return namepromise;
-}
-function setname() {
-	// called on popupform button
-	name = $("#namefield").val();
-	$('#popupform').popup('close');
-	$.mobile.navigate( "#listpage" );
-	namepromiseptr.resolve();
-}
-
 function offerlogin() {
-	// offer log in if not already
 	var loginpromise = new Parse.Promise();
-	if (!user) {
-		getname().then(
-			function(success) {
-				loginpromise.resolve();
-			});
-	} else {
-		loginpromise.resolve();
-	}
+	namepromiseptr = loginpromise; 		// global var, horrible form!
+	$('#popupform').popup('open');	    // open form, its post will resolve promise
 	return loginpromise;
+}
 
+function FBlogin() {
+	// User chose to log in/create account
 
-/* Hiding FB Accounts !!!!!
-	var currentUser = Parse.User.current();
-	if (currentUser) {
-		promise.resolve();
-		return promise;
-	} 
-
-	if ("standalone" in navigator && navigator.standalone) {
-		var permissionUrl = "https://m.facebook.com/dialog/oauth?client_id=" + appId + "&response_type=code&redirect_uri=" + window.location;
-		promise.reject();
-		window.location = permissionUrl;
-} else {
 	Parse.FacebookUtils.logIn(null, {
 		success: function(fbuser) {
 			if (!fbuser.existed()) {
@@ -232,15 +226,23 @@ function offerlogin() {
 			} else {
 				alert('User logged in through Facebook');
 			}
-			promise.resolve();
+			$('#popupform').popup('close');
+			namepromiseptr.resolve();
 		},
 		error: function(user, error) {
 			alert('User cancelled log in');
-			promise.reject();
+			$('#popupform').popup('close');
+			namepromiseptr.reject();
 		}
 	});
 }
-*/
+
+function setname() {
+	// called on popupform button
+	name = $("#namefield").val();
+	$('#popupform').popup('close');
+	//$.mobile.navigate( "#listpage" );
+	namepromiseptr.resolve();
 }
 
 function getnameformood(mood) {
@@ -291,7 +293,7 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 					xAxis: {
 						type: 'datetime',
 						tickInterval: 24 * 3600 * 1000,
-						minRange: 24 * 3600000 // day
+						minRange: 4 * 3600000 // 4 hours
 					},
 					yAxis: {
 						title: {

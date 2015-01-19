@@ -52,7 +52,7 @@
           <div style="padding:10px 20px;" class="ui-corner-all" id="launchlogin">
             <h3>Or Login:</h3>
 			<p class="small-text">Use a FaceBook login to access a private MoodMaestro account.</p>
-            <button onclick="alert('Not yet implemented!');" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Log In</button>
+            <button onclick="FBlogin()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Log In</button>
           </div>
 	  </div>
 
@@ -81,8 +81,8 @@
 	  <input type="text" name="text-1" id="text-1" value=""/>
 	  <div id="postbuttoncontainer">
 		<div class="split-btn">
-		  <a href="#" onclick="postit()">Post It</a>
-		  <a href="#" onclick="postit()">Post Publicly</a>
+		  <a href="#" onclick="postit(true)">Post It</a>
+		  <a href="#" onclick="postit(false)">Post Publicly</a>
 		</div>
 	  </div>
 	</div>
@@ -104,6 +104,7 @@
 	</div>
 	<div role="main" class="ui-content" >
 	  
+	  <div id="tablediv">
 	  <table  id="moodheader" >
 		<thead>
 		  <tr>
@@ -113,7 +114,7 @@
 		  </tr>
 		</thead>
 	  </table>
-	  <div >
+	  <div>
 		<table id="moods">
 		  <tbody id="mood-entries"><tr/>
 			<!-- for debugging:
@@ -123,7 +124,7 @@
 		  </tbody>
 		</table>
 	  </div>
-
+</div>
 	</div>
 	<div data-role="footer" data-position="fixed">
 	  <div data-role="navbar">
