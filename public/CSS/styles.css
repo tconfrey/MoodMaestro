@@ -106,8 +106,10 @@ td, th {
 }
 
 #graphcontainer {
-	width: 100%,
-	height: 100%
+	width: 100%;
+	height: 70%;
+	padding-bottom: 50px;
+	position: absolute;
 }
 
 .aboutbtn {

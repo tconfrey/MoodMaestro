@@ -4,13 +4,18 @@ var Post;
 // Cached variables
 var name = "";
 var namepromiseptr;
+var initialized = false;
 
 // Set up app
 jQuery( document ).on( "pagecreate", function( event ) {
 
+	// only run once
+	if (initialized) return;
+	initialized = true; 
+
+	console.log("pagecreate cb");
 	// Initialize Parse
 	Parse.initialize("CKUBetgoCV0iygTQEJaOMpVt5raxZFS61ESh7e4e", "dhILThcP5vWwn0e5tlyIJYpan0EM0ZDzEK3ClV5a");
-
 
 	// Initialize Facebook
 	window.fbAsyncInit = function() {
@@ -36,6 +41,7 @@ jQuery( document ).on( "pagecreate", function( event ) {
 
 //Set up the split button plugin. See CSS for more details. This was: $(document).ready
 $(window).load(function(){
+	console.log("window load cb");
   $('.split-btn').splitdropbutton({
     toggleDivContent: '<i class="fa fa-sort-desc" style="margin-left: 15px;"></i>' // optional html content for the clickable toggle div
   })
@@ -82,7 +88,7 @@ function savepost(post) {
 		post.set("text", post.get("text") + " - " + uname);
 	}
 	// Set attribution on anonymous posts
-	if (name) {
+	if (!Parse.User.current() && name) {
 		post.set("text", post.get("text") + " - " + name);
 	}
 
@@ -95,7 +101,7 @@ function savepost(post) {
 			var year = d.getFullYear();
 			var hour = d.getHours();
 			var mins = d.getMinutes();
-			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
+//			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 			posts = [];			  // reload data as needed
 			savepromise.resolve();
@@ -113,18 +119,21 @@ function savepost(post) {
 var showoverlay = true;
 jQuery( document ).on( "pageshow", "#mainpage", function (event ) {
 	// Display informational overlay popup until fourth visit
+	console.log("mainpage show cb");
 	var visits = getCookie("visits") || 0 ;
 	if (showoverlay && (visits < 4)) {		
 		setTimeout("$('#overlay').popup('open')", 250);
 		showoverlay = false;	// don't show after first time, per visit
 	}
 	setCookie("visits", parseInt(visits) + 1);
+	$("#text-1").val("");
 });
 
 
 // load history on list page
 jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 
+	console.log("listpage show cb");
 	// Clear the existing table data, if any
 	$( "#moods .mooddata" ).remove();
 
@@ -212,7 +221,7 @@ function FBlogin() {
 		success: function(fbuser) {
 			if (!fbuser.existed()) {
 				
-				alert("User signed up and logged in through Facebook!");
+//				alert("User signed up and logged in through Facebook!");
 				FB.api(
 					"/me",
 					function (response) {
@@ -224,7 +233,8 @@ function FBlogin() {
 					}
 				);
 			} else {
-				alert('User logged in through Facebook');
+				var uname = Parse.User.current().get("username");
+				alert('Welcome back ' + uname + ' !');
 			}
 			$('#popupform').popup('close');
 			namepromiseptr.resolve();
@@ -275,64 +285,66 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 /* Hiding Accounts !!!!!
 	login().then(function() {
 */
-		query().then(
-			function(success) {	
-				$('#graphcontainer').highcharts({
-					chart: {
-						type: 'areaspline',
-						zoomType: 'x'
-					},
+	console.log("graphpage show cb");
+	$("#graphcontainer").width($("#graphpage .ui-content").width() - 25);
+	query().then(
+		function(success) {	
+			$('#graphcontainer').highcharts({
+				chart: {
+					type: 'areaspline',
+					zoomType: 'x'
+				},
+				title: {
+					text: 'Mood Graph'
+				},
+				subtitle: {
+					text: document.ontouchstart === undefined ?
+						'Click and drag in the plot area to zoom in' :
+						'Pinch the chart to zoom in'
+				},
+				xAxis: {
+					type: 'datetime',
+					tickInterval: 24 * 3600 * 1000,
+					minRange: 4 * 3600000 // 4 hours
+				},
+				yAxis: {
 					title: {
-						text: 'Mood Graph'
+						text: 'Mood'
 					},
-					subtitle: {
-						text: document.ontouchstart === undefined ?
-							'Click and drag in the plot area to zoom in' :
-							'Pinch the chart to zoom in'
-					},
-					xAxis: {
-						type: 'datetime',
-						tickInterval: 24 * 3600 * 1000,
-						minRange: 4 * 3600000 // 4 hours
-					},
-					yAxis: {
-						title: {
-							text: 'Mood'
+					max: 10,
+					min: 0,
+					tickInterval: 2
+				},
+				legend: {
+					enabled: false
+				},
+				plotOptions: {
+					areaspline: {
+						fillColor: {
+							linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+							stops: [
+								[0, '#E0C0C0'],
+								[1, '#C0E0C0']
+							]
 						},
-						max: 10,
-						min: 0,
-						tickInterval: 2
-					},
-					legend: {
-						enabled: false
-					},
-					plotOptions: {
-						areaspline: {
-							fillColor: {
-								linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-								stops: [
-									[0, '#E0C0C0'],
-									[1, '#C0E0C0']
-								]
-							},
-							marker: {
-								radius: 3
-							},
-							lineWidth: 2,
-							states: {
-								hover: {
-									lineWidth: 1
-								}
-							},
-							threshold: 5
-						}
-					},
+						marker: {
+							radius: 3
+						},
+						lineWidth: 2,
+						states: {
+							hover: {
+								lineWidth: 1
+							}
+						},
+						threshold: 5
+					}
+				},
 
-					series: [{
-						/*type: 'spline',*/
-						name: 'Mood',
-						data: posts
-					}]
-				});
+				series: [{
+					/*type: 'spline',*/
+					name: 'Mood',
+					data: posts
+				}]
 			});
+		});
 });
