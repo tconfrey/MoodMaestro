@@ -168,6 +168,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 							"</tr>"
 					);
 				}
+				tabletoggleprivate(); // respect toggle setting
 			},
 			function(error) {
 				alert("Error: " + error.code + " " + error.message);
