@@ -97,6 +97,13 @@ td, th {
 	margin-right: auto;
 	margin-top: 20px;
 }
+.slider-container .ui-slider-switch { 
+	width: 9em;
+	display: block;
+	margin-left: auto; 
+	margin-right: auto;
+	margin-top: 0px;
+}
 
 .small-text {
 	font-size: 9pt;

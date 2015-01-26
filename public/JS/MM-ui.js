@@ -37,14 +37,10 @@ jQuery( document ).on( "pagecreate", function( event ) {
 
 	// Create Post class
 	Post = Parse.Object.extend("Post");
-});
 
-//Set up the split button plugin. See CSS for more details. This was: $(document).ready
-$(window).load(function(){
-	console.log("window load cb");
-  $('.split-btn').splitdropbutton({
-    toggleDivContent: '<i class="fa fa-sort-desc" style="margin-left: 15px;"></i>' // optional html content for the clickable toggle div
-  })
+	$( "#tableslider" ).bind( "change", function(event, ui) {
+		tabletoggleprivate();
+	});
 });
 
 function postit(private) {
@@ -127,6 +123,12 @@ jQuery( document ).on( "pageshow", "#mainpage", function (event ) {
 	}
 	setCookie("visits", parseInt(visits) + 1);
 	$("#text-1").val("");
+
+	//Set up the split button plugin. See CSS for more details. 
+	//This was: $(document).ready
+	$('.split-btn').splitdropbutton({
+		toggleDivContent: '<i class="fa fa-sort-desc" style="margin-left: 15px;"></i>' // optional html content for the clickable toggle div
+	});
 });
 
 
@@ -145,7 +147,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 			function(success) {			
 				for (var i = 0; i < posts.length; i++) { 
 					var post = posts[i];
-					var d = post.serverobj.updatedAt;
+					var d = new Date(post.createdAt);
 					var month = d.getMonth()+1;
 					var day = d.getDate();
 					var year = d.getFullYear();
@@ -157,11 +159,11 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 
 					$('#mood-entries tr:first').after
 					(
-						"<tr class='mooddata " + moodname + "-mood'>" +
+						"<tr class='mooddata " + (post.private ? "private " : "public ") + moodname + "-mood'>" +
 							"<td class='mood-col'>" + post.mood + "<br/>" +
 							"<img class='mini-emo' src='assets/" + moodname + ".jpg' />" +
 							"</td>" +
-							"<td class='reason-col'>" + post.reason + "</td>" +
+							"<td class='reason-col'>" + post.text + "</td>" +
 							"<td class='when-col'>" + date + "</td>" +
 							"</tr>"
 					);
@@ -184,27 +186,36 @@ function query() {
 		return promise;
 	}
 	var qry = new Parse.Query(Post);
-	qry.limit(1000).ascending("updatedAt").find({
+
+	Parse.Cloud.run("MMQuery", {usr: "Tony"}, {
 		success: function(results) {
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) { 
-				var post = new Object();
-				post.serverobj = results[i];
-				post.mood = results[i].get("mood");
-				post.reason = results[i].get("text");
-				// These next attributes are added so I can use the same objs for graphs
-				post.x = results[i].updatedAt;
-				post.y = parseInt(post.mood);
-				post.name = post.reason;
-				posts.push(post);
+				// Attributes are added so I can use the same objs for graphs
+				var d = new Date(results[i].createdAt);
+				results[i].x = d;
+				results[i].y = parseFloat(results[i].mood);
+
+				posts.push(results[i]);
 			}
 			promise.resolve();
 		},
 		error: function(error) {
 			promise.reject("Error: " + error.code + " " + error.message);
 		}
-	})
+	});
 	return promise;
+}
+
+function tabletoggleprivate()  {
+	// toggle showing public or private post in table
+	if ($("#tableslider").val()=="public") {
+		$("#moods .private").hide("slow");
+		$("#moods .public").show("slow");
+	} else {
+		$("#moods .public").hide("slow");
+		$("#moods .private").show("slow");
+	}
 }
 
 function offerlogin() {
@@ -286,7 +297,17 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 	login().then(function() {
 */
 	console.log("graphpage show cb");
+	var weekday = new Array(7);
+	weekday[0]=  "Sunday";
+	weekday[1] = "Monday";
+	weekday[2] = "Tuesday";
+	weekday[3] = "Wednesday";
+	weekday[4] = "Thursday";
+	weekday[5] = "Friday";
+	weekday[6] = "Saturday";
+
 	$("#graphcontainer").width($("#graphpage .ui-content").width() - 25);
+//	$("#graphcontainer").height($("#graphpage .ui-content").height() * 0.75);
 	query().then(
 		function(success) {	
 			$('#graphcontainer').highcharts({
@@ -337,6 +358,18 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 							}
 						},
 						threshold: 5
+					}
+				},
+
+				tooltip: {
+					formatter: function () {
+						
+						var hour = this.x.getHours();
+						var mins = this.x.getMinutes();
+						mins = (mins <10) ? "0"+mins : mins; // leading 0
+						var day = weekday[this.x.getDay()];
+						return '<b>' + day + " at " + hour + ":" + mins +
+							'</b><br/>' + this.y + ": '" + this.point.text + "'";
 					}
 				},
 

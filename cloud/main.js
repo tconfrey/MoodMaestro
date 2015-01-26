@@ -33,8 +33,40 @@ Parse.Cloud.beforeSave("Post", function(request, response) {
 		var encrypted = encrypt(text);
 		var encryptedtext = encrypted.toString();
 		request.object.set("encryptedText", encryptedtext);
+		request.object.set("text", encryptedtext);
 		response.success();
 	}, function(error) {
 		response.error();
+	});
+});
+
+Parse.Cloud.define("MMQuery", function(request, response) {
+	// Create Post class
+	Post = Parse.Object.extend("Post");
+
+	console.log("request="+request);
+	var qry = new Parse.Query(Post);
+	var resultsJson = [];		// return array of json objs
+	Parse.Config.get().then(function(config) {
+		password = config.get('encryptionKey');
+		qry.limit(1000).ascending("createdAt").find({
+			success: function(results) {
+				for (var i = 0; i < results.length; i++) { 
+					var resultJson = results[i].toJSON();
+					//console.log("obj="+JSON.stringify(resultJson));
+					var etext = results[i].get("encryptedText");
+					// decrypt before sending back
+					if (etext) {
+						var dtext = decrypt(etext);
+						resultJson["text"] = dtext;
+					}
+					resultsJson.push(resultJson);
+				}
+				response.success(resultsJson);
+			},
+			error: function(results) {
+				response.error("failed");
+			}
+		});
 	});
 });
