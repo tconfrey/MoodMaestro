@@ -308,7 +308,7 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 	weekday[6] = "Saturday";
 
 	$("#graphcontainer").width($("#graphpage .ui-content").width() - 25);
-//	$("#graphcontainer").height($("#graphpage .ui-content").height() * 0.75);
+	$("#graphcontainer").height("70%");
 	query().then(
 		function(success) {	
 			$('#graphcontainer').highcharts({
