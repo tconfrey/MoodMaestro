@@ -24,6 +24,34 @@ function decrypt(text){
 	return dec;
 }
 
+Parse.Cloud.define("MMDecrypt", function(request, response) {
+	// Used for debugging
+	var text = request.params.txt;
+	Parse.Config.get().then(function(config) {
+		password = config.get('encryptionKey');
+		var decrypted = decrypt(text);
+		var decryptedtext = decrypted.toString();
+		response.success(decryptedtext);
+	}, function(error) {
+		response.error();
+	});
+});
+
+Parse.Cloud.define("MMEncrypt", function(request, response) {
+	// Used for debugging. EG from console run:
+	// Parse.Cloud.run("MMEncrypt", {txt: "this is the text"});
+	var text = request.params.txt;
+	Parse.Config.get().then(function(config) {
+		password = config.get('encryptionKey');
+		var encrypted = encrypt(text);
+		var encryptedtext = encrypted.toString();
+		response.success(encryptedtext);
+	}, function(error) {
+		response.error();
+	});
+});
+	
+
 Parse.Cloud.beforeSave("Post", function(request, response) {
 	// encrypt the text string before saving
 
@@ -39,6 +67,7 @@ Parse.Cloud.beforeSave("Post", function(request, response) {
 		response.error();
 	});
 });
+
 
 Parse.Cloud.define("MMQuery", function(request, response) {
 	// Create Post class

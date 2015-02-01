@@ -41,6 +41,9 @@ jQuery( document ).on( "pagecreate", function( event ) {
 	$( "#tableslider" ).bind( "change", function(event, ui) {
 		tabletoggleprivate();
 	});
+	$( "#graphslider" ).bind( "change", function(event, ui) {
+		graphtoggleprivate();
+	});
 });
 
 function postit(private) {
@@ -163,7 +166,7 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 							"<td class='mood-col'>" + post.mood + "<br/>" +
 							"<img class='mini-emo' src='assets/" + moodname + ".jpg' />" +
 							"</td>" +
-							"<td class='reason-col'>" + post.text + "</td>" +
+							"<td class='reason-col'>" + linkify(post.text) + "</td>" +
 							"<td class='when-col'>" + date + "</td>" +
 							"</tr>"
 					);
@@ -178,6 +181,9 @@ jQuery( document ).on( "pageshow", "#listpage", function (event ) {
 
 // local storage for posts queried from cloud
 var posts = [];
+var publicposts = [];
+var privateposts = [];
+var graphposts;
 
 function query() {
 	// query for mood objects
@@ -188,7 +194,7 @@ function query() {
 	}
 	var qry = new Parse.Query(Post);
 
-	Parse.Cloud.run("MMQuery", {usr: "Tony"}, {
+	Parse.Cloud.run("MMQuery", {}, {
 		success: function(results) {
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) { 
@@ -198,6 +204,12 @@ function query() {
 				results[i].y = parseFloat(results[i].mood);
 
 				posts.push(results[i]);
+				// Keep seperate public/private lists for graphing
+				if (results[i].private) {
+					privateposts.push(results[i]);
+				} else {
+					publicposts.push(results[i]);
+				}
 			}
 			promise.resolve();
 		},
@@ -216,6 +228,21 @@ function tabletoggleprivate()  {
 	} else {
 		$("#moods .public").hide("slow");
 		$("#moods .private").show("slow");
+	}
+}
+
+function graphtoggleprivate()  {
+	// toggle showing public or private post in table
+	var chart = $('#graphcontainer').highcharts();
+	if ($("#graphslider").val()=="public") {
+		graphposts = publicposts;
+	} else {
+		graphposts = privateposts;
+	}
+	if (chart) {
+		chart.series[0].update({
+			data: graphposts
+		});
 	}
 }
 
@@ -298,6 +325,7 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 	login().then(function() {
 */
 	console.log("graphpage show cb");
+	graphtoggleprivate();		// respect public/private view
 	var weekday = new Array(7);
 	weekday[0]=  "Sunday";
 	weekday[1] = "Monday";
@@ -377,8 +405,27 @@ jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
 				series: [{
 					/*type: 'spline',*/
 					name: 'Mood',
-					data: posts
+					data: graphposts
 				}]
 			});
 		});
 });
+
+// stolen from http://stackoverflow.com/questions/37684/how-to-replace-plain-urls-with-links#21925491
+function linkify(inputText) {
+    var replacedText, replacePattern1, replacePattern2, replacePattern3;
+
+    //URLs starting with http://, https://, or ftp://
+    replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+    //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+    replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+    //Change email addresses to mailto:: links.
+    replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+    replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+
+    return replacedText;
+}
