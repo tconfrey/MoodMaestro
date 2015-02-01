@@ -103,6 +103,8 @@ function savepost(post) {
 //			alert("posted:\n"+post.get("text")+"\n"+"mood="+post.get("mood") + "\nat:"+hour+":"+mins+" on "+month+"/"+date+"/"+year);
 			$("#text-1").val(''); // clear text
 			posts = [];			  // reload data as needed
+			publicposts = [];
+			privateposts = [];
 			savepromise.resolve();
 		},
 		error: function(gameScore, error) {
