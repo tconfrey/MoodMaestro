@@ -213,7 +213,14 @@ function getnameformood(mood) {
 	return "best";
 }
 
-
+let cookie = {};
+function setCookie(key, value) {
+    cookie[key] = value;
+}
+function getCookie(key) {
+    return cookie[key];
+}
+/*
 // copied from http://stackoverflow.com/questions/1458724/how-to-set-unset-cookie-with-jquery
 function setCookie(key, value) {
     var expires = new Date();
@@ -226,7 +233,7 @@ function getCookie(key) {
     var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return keyValue ? keyValue[2] : null;
 }
-
+*/
 
 // load history on graph page
 jQuery( document ).on( "pageshow", "#graphpage", function (event ) {
