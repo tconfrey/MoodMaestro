@@ -5,16 +5,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<link rel="icon" 
+	<!--<link rel="icon"
       type="image/png" 
       href="https://moodmaestro.parseapp.com/favicon.png">
+	-->
 	<link rel="apple-touch-icon" href="/assets/tragedycomedy128.png">
 	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
 	<link rel="stylesheet" href="CSS/styles.css">
-	<script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.3.2.min.js"></script>
+	<!--
+		--<script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.3.2.min.js"></script> --
+		-->
 	<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<script type="text/javascript" src="JS/jquery.splitdropbutton.js"></script>
@@ -26,165 +29,165 @@
 <body>
   <!--  <div id="fb-root"></div> -->
   <div data-role="page" id="mainpage">
-	<div id="buttonparent" data-role="header">
-	  <img class="logo" src="assets/MoodMaestro"/>
-	  <a id="aboutbtn" href="#aboutpage" data-role="button" data-icon="info" class="aboutbtn" data-transition="flip" data-iconpos="notext" >about</a>
-	</div>
-
-	<div role="main" class="ui-content" >
-
-	  <div data-role="popup" id="overlay">
-		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-		<h2 class="center">Welcome to MoodMaestro</h2>
-		<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of highs and lows. The List and Graph pages (buttons below) show overviews.</p>
-		<p>On Posting you can use your FaceBook credentials to create an account, or post without an account. Posts can be public or private. Give it a try! Enter posts that either capture your mood or to give me feedback on the app. See the info button (top left) for more background.</p>
-		<p>
-		  Cheers,<br/>&nbsp;&nbsp;&nbsp;Tony</p>
-	  </div>
-
-	  <div data-role="popup" id="popupform" data-theme="a" class="ui-corner-all">
-          <div style="padding:10px 20px;" class="ui-corner-all" id="publicpost">
-            <h3>Name for public post:</h3>
-            <label for="un" class="ui-hidden-accessible">Name:</label>
-            <input type="text" id="namefield" value="anon" placeholder="username" data-theme="a">
-            <button onclick="setname()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Post</button>
-          </div>
-          <div style="padding:10px 20px;" class="ui-corner-all" id="launchlogin">
-            <h3>Or Login:</h3>
-			<p class="small-text">Use a FaceBook login to access a private MoodMaestro account.</p>
-            <button onclick="FBlogin()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Log In</button>
-          </div>
-	  </div>
-
-	  <div class="label">How's your mood?</div>
-	  <div class="ui-grid-d">
-		<div class="ui-block-a">
-		  <img class="emo" src="assets/worst.jpg" />
+		<div id="buttonparent" data-role="header">
+			<img class="logo" src="assets/MoodMaestro"/>
+			<a id="aboutbtn" href="#aboutpage" data-role="button" data-icon="info" class="aboutbtn" data-transition="flip" data-iconpos="notext" >about</a>
 		</div>
-		<div class="ui-block-b">
-		  <img class="emo" src="assets/bad.jpg" />
-		</div>
-		<div class="ui-block-c">
-		  <img class="emo" src="assets/ok.jpg" />
-		</div>
-		<div class="ui-block-d">
-		  <img class="emo" src="assets/good-new.jpg" />
-		</div>
-		<div class="ui-block-e">
-		  <img class="emo" src="assets/best.jpg" />
-		</div>
-	  </div>
 
-	  <input type="range" name="slider" id="slider" min="0" max="10" value="5" data-highlight="true" step="0.1"/>
+		<div role="main" class="ui-content" >
 
-	  <div class="label whylabel">Why?</div>
-	  <input type="text" name="text-1" id="text-1" value=""/>
-	  <div id="postbuttoncontainer">
-		<div class="split-btn">
-		  <a href="#" onclick="postit(true)">Post It</a>
-		  <a href="#" onclick="postit(false)">Post Publicly</a>
+			<div data-role="popup" id="overlay">
+				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<h2 class="center">Welcome to MoodMaestro</h2>
+				<p> MoodMaestro is a mood-tracking, micro-journal app. Simply adjust the slider and add a few words to capture the moment. Over time you'll build up a quantitative journal of highs and lows. The List and Graph pages (buttons below) show overviews.</p>
+				<p>On Posting you can use your FaceBook credentials to create an account, or post without an account. Posts can be public or private. Give it a try! Enter posts that either capture your mood or to give me feedback on the app. See the info button (top left) for more background.</p>
+				<p>
+					Cheers,<br/>&nbsp;&nbsp;&nbsp;Tony</p>
+			</div>
+
+			<div data-role="popup" id="popupform" data-theme="a" class="ui-corner-all">
+        <div style="padding:10px 20px;" class="ui-corner-all" id="publicpost">
+          <h3>Name for public post:</h3>
+          <label for="un" class="ui-hidden-accessible">Name:</label>
+          <input type="text" id="namefield" value="anon" placeholder="username" data-theme="a">
+          <button onclick="setname()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Post</button>
+        </div>
+        <div style="padding:10px 20px;" class="ui-corner-all" id="launchlogin">
+          <h3>Or Login:</h3>
+					<p class="small-text">Use a FaceBook login to access a private MoodMaestro account.</p>
+          <button onclick="FBlogin()" class="ui-btn ui-corner-all ui-shadow ui-btn-e ui-btn-icon-left ui-icon-check">Log In</button>
+        </div>
+			</div>
+
+			<div class="label">How's your mood?</div>
+			<div class="ui-grid-d">
+				<div class="ui-block-a">
+					<img class="emo" src="assets/worst.jpg" />
+				</div>
+				<div class="ui-block-b">
+					<img class="emo" src="assets/bad.jpg" />
+				</div>
+				<div class="ui-block-c">
+					<img class="emo" src="assets/ok.jpg" />
+				</div>
+				<div class="ui-block-d">
+					<img class="emo" src="assets/good-new.jpg" />
+				</div>
+				<div class="ui-block-e">
+					<img class="emo" src="assets/best.jpg" />
+				</div>
+			</div>
+
+			<input type="range" name="slider" id="slider" min="0" max="10" value="5" data-highlight="true" step="0.1"/>
+
+			<div class="label whylabel">Why?</div>
+			<input type="text" name="text-1" id="text-1" value=""/>
+			<div id="postbuttoncontainer">
+				<div class="split-btn">
+					<a href="#" onclick="postit(true)">Post It</a>
+					<a href="#" onclick="postit(false)">Post Publicly</a>
+				</div>
+			</div>
 		</div>
-	  </div>
-	</div>
-	<div data-role="footer" data-position="fixed">
-	  <div data-role="navbar">
-		<ul>
-		  <li><a href="#listpage">List</a></li>
-		  <li><a href="#graphpage">Graph</a></li>
-		</ul>
-	  </div><!-- /navbar -->
-	</div>
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#listpage">List</a></li>
+					<li><a href="#graphpage">Graph</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
   </div>
 
 
 
   <div data-role="page" id="listpage">
-	<div data-role="header">
-	  <img class="logo" src="assets/MoodMaestro"/>
-	  <div class="slider-container">
-		<select class="private-slider" id="tableslider" data-role="slider" data-theme="c">
-		  <option value="public">Public</option>
-		  <option value="private">Private</option>
-		</select>
-	  </div>
-	</div>
-	<div role="main" class="ui-content" >
-	  
-	  <div id="tablediv">
-	  <table  id="moodheader" >
-		<thead>
-		  <tr>
-			<th class="mood-col" >Mood</th>
-			<th class="reason-col">Why</th>
-			<th class="when-col">When</th>
-		  </tr>
-		</thead>
-	  </table>
-	  <div>
-		<table id="moods">
-		  <tbody id="mood-entries"><tr/>
-			<!-- for debugging:
-				<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
-			<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
-			-->
-		  </tbody>
-		</table>
-	  </div>
-</div>
-	</div>
-	<div data-role="footer" data-position="fixed">
-	  <div data-role="navbar">
-		<ul>
-		  <li><a href="#mainpage">Main</a></li>
-		  <li><a href="#graphpage">Graph</a></li>
-		</ul>
-	  </div><!-- /navbar -->
-	</div>
+		<div data-role="header">
+			<img class="logo" src="assets/MoodMaestro"/>
+			<div class="slider-container">
+				<select class="private-slider" id="tableslider" data-role="slider" data-theme="c">
+					<option value="public">Public</option>
+					<option value="private">Private</option>
+				</select>
+			</div>
+		</div>
+		<div role="main" class="ui-content" >
+
+			<div id="tablediv">
+				<table  id="moodheader" >
+					<thead>
+						<tr>
+							<th class="mood-col" >Mood</th>
+							<th class="reason-col">Why</th>
+							<th class="when-col">When</th>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					<table id="moods">
+						<tbody id="mood-entries"><tr/>
+							<!-- for debugging:
+									 <tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
+							<tr ><td class="mood-col">3.1<br><img class="mini-emo" src="assets/bad.jpg"></td><td class="reason-col"> Doesn't look good on iPad </td><td class="when-col">10:35 on 12/29/2014</td></tr>
+							-->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#mainpage">Main</a></li>
+					<li><a href="#graphpage">Graph</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
   </div>
 
   <div data-role="page" id="graphpage">
-	<div data-role="header">
-	  <img class="logo" src="assets/MoodMaestro"/>
-	  <div class="slider-container">
-		<select class="private-slider" id="graphslider" data-role="slider" data-theme="c">
-		  <option value="public">Public</option>
-		  <option value="private">Private</option>
-		</select>
-	  </div>
-	</div>
-	<div role="main" class="ui-content">
-	  <div id="graphcontainer"></div>
-	</div>
-	<div data-role="footer" data-position="fixed">
-	  <div data-role="navbar">
-		<ul>
-		  <li><a href="#mainpage">Main</a></li>
-		  <li><a href="#listpage">List</a></li>
-		</ul>
-	  </div><!-- /navbar -->
-	</div>
+		<div data-role="header">
+			<img class="logo" src="assets/MoodMaestro"/>
+			<div class="slider-container">
+				<select class="private-slider" id="graphslider" data-role="slider" data-theme="c">
+					<option value="public">Public</option>
+					<option value="private">Private</option>
+				</select>
+			</div>
+		</div>
+		<div role="main" class="ui-content">
+			<div id="graphcontainer"></div>
+		</div>
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#mainpage">Main</a></li>
+					<li><a href="#listpage">List</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
   </div>
 
 
   <div data-role="page" id="aboutpage">
-	<div data-role="header">
-	  <img class="logo" src="assets/MoodMaestro"/>
-	</div>
-	<div role="main" class="ui-content">
-	  <p>MoodMaestro is an app I wrote for the desktop as a gift to my son Nick a few years ago. Nick is an avid life tracker and he had been looking for some way to track his moods. MoodMaestro has been letting him do that for the last five years such that at this point he has all of his high school and first year of college documented in brief synopses along with a numeric mood.</p>
-	  <p>I've been meaning ever since to write it as a web/mobile app. I took the opportunity of my recent break around the Holidays to take a run at it, and got entirely too sucked in. This version of MM is the end result. I didn't get as far as I would have liked but further than I expected to.</p>
-	  <p>The goal is to allow private account creation optionally linked to a Facebook account. (I had it mostly working but the FB integration on mobile brought me down the path of some whitescreen bug that I banged my head against for a day!) The data should be always secure and private with the option to make public. Groups, or Google Circles, could potentially use it to track collective sentiment in a running emotional twitter-like feed. </p>
-	  <p>The current skin is based on the original, and uses pictures of Nick and my other son Jack (and the anonymous screaming green baby), and my thoughts at the time on where happiness and sadness placed on the color wheel. Originally I used a -5 to 5 scale but we decided to go for 1-10 as maybe simpler.</p>
-	  <p>I'd love any feedback on the concept, ideas for color schemes/numeric ratings strategies, or anything else. Adding public posts with examples usages or suggestions would be cool, alternately email me at my gmail account (which is guessable).</p>
-	  <p>Cheers,<br>&nbsp;&nbsp;&nbsp;Tony</p>
-	</div>
-	<div data-role="footer" data-position="fixed">
-	  <div data-role="navbar">
-		<ul>
-		  <li><a data-rel="back" data-direction="reverse" data-transition="flip" href="">Back</a></li>
-		</ul>
-	  </div><!-- /navbar -->
-	</div>
+		<div data-role="header">
+			<img class="logo" src="assets/MoodMaestro"/>
+		</div>
+		<div role="main" class="ui-content">
+			<p>MoodMaestro is an app I wrote for the desktop as a gift to my son Nick a few years ago. Nick is an avid life tracker and he had been looking for some way to track his moods. MoodMaestro has been letting him do that for the last five years such that at this point he has all of his high school and first year of college documented in brief synopses along with a numeric mood.</p>
+			<p>I've been meaning ever since to write it as a web/mobile app. I took the opportunity of my recent break around the Holidays to take a run at it, and got entirely too sucked in. This version of MM is the end result. I didn't get as far as I would have liked but further than I expected to.</p>
+			<p>The goal is to allow private account creation optionally linked to a Facebook account. (I had it mostly working but the FB integration on mobile brought me down the path of some whitescreen bug that I banged my head against for a day!) The data should be always secure and private with the option to make public. Groups, or Google Circles, could potentially use it to track collective sentiment in a running emotional twitter-like feed. </p>
+			<p>The current skin is based on the original, and uses pictures of Nick and my other son Jack (and the anonymous screaming green baby), and my thoughts at the time on where happiness and sadness placed on the color wheel. Originally I used a -5 to 5 scale but we decided to go for 1-10 as maybe simpler.</p>
+			<p>I'd love any feedback on the concept, ideas for color schemes/numeric ratings strategies, or anything else. Adding public posts with examples usages or suggestions would be cool, alternately email me at my gmail account (which is guessable).</p>
+			<p>Cheers,<br>&nbsp;&nbsp;&nbsp;Tony</p>
+		</div>
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a data-rel="back" data-direction="reverse" data-transition="flip" href="">Back</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
   </div>
 
 </body>
